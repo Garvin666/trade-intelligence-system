@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境电商智能选品决策系统 · 在线演示</title>
+<meta name="description" content="面向中小跨境卖家的选品与贸易决策系统：132 个食品 SKU × 15 市场 = 1,980 组合，三模型预测 + 六维评分 + Go/No-Go 判定。">
+<style>
+  :root{
+    --ink:#0b1a2b; --ink-2:#12283f; --panel:#16324c; --line:#24476a;
+    --text:#e8f1fa; --muted:#93aec7;
+    --blue:#4C78A8; --cyan:#3fb6d3; --amber:#F58518; --green:#54A24B; --red:#E45756;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    background:linear-gradient(180deg,var(--ink) 0%,#0d2033 45%,var(--ink-2) 100%);
+    color:var(--text); line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  a{color:var(--cyan);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  header{padding:56px 0 36px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:16px;margin-bottom:26px}
+  .brand img{width:52px;height:52px;object-fit:contain}
+  .brand span{font-size:13px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+  h1{font-size:clamp(28px,4.4vw,46px);line-height:1.25;letter-spacing:-.01em;font-weight:700}
+  h1 em{font-style:normal;color:var(--cyan)}
+  .lede{margin-top:18px;font-size:clamp(15px,1.7vw,18px);color:var(--muted);max-width:760px}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:34px 0 6px}
+  .kpi{background:rgba(22,50,76,.72);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .kpi b{display:block;font-size:clamp(24px,3vw,32px);font-weight:700;font-variant-numeric:tabular-nums}
+  .kpi small{display:block;margin-top:6px;font-size:12.5px;color:var(--muted);letter-spacing:.03em}
+  .kpi.b b{color:var(--cyan)} .kpi.a b{color:var(--amber)} .kpi.g b{color:var(--green)}
+
+  section{padding:52px 0;border-bottom:1px solid rgba(36,71,106,.55)}
+  h2{font-size:clamp(20px,2.4vw,26px);margin-bottom:8px;font-weight:700}
+  .sub{color:var(--muted);font-size:14.5px;margin-bottom:26px;max-width:820px}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:10px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:13px;letter-spacing:.04em;background:rgba(22,50,76,.5)}
+  td code{background:rgba(76,120,168,.18);padding:2px 7px;border-radius:5px;font-size:13px;color:#bcd9f0}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .card{background:rgba(22,50,76,.66);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .card h3{font-size:16px;margin-bottom:8px;color:#fff}
+  .card p{font-size:14px;color:var(--muted)}
+  .card .tag{display:inline-block;margin-top:12px;font-size:11.5px;letter-spacing:.05em;
+    color:var(--cyan);border:1px solid rgba(63,182,211,.35);border-radius:999px;padding:2px 10px}
+
+  figure{margin:0}
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+  .shots img{width:100%;border-radius:10px;border:1px solid var(--line);background:#fff}
+  figcaption{margin-top:9px;font-size:13px;color:var(--muted)}
+
+  pre{background:#08131f;border:1px solid var(--line);border-radius:10px;padding:18px 20px;
+      overflow-x:auto;font-size:13.5px;line-height:1.65;color:#cfe4f5;
+      font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace}
+  pre .c{color:#6f8ba3}
+
+  .note{background:rgba(245,133,24,.09);border-left:3px solid var(--amber);
+        border-radius:0 10px 10px 0;padding:16px 20px;font-size:14px;color:#f0dcc6}
+  .note b{color:var(--amber)}
+
+  .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+  .btn{display:inline-block;padding:12px 26px;border-radius:10px;font-size:14.5px;font-weight:600;
+       border:1px solid transparent;transition:.18s}
+  .btn-p{background:var(--cyan);color:#06202c}
+  .btn-p:hover{background:#5fcde8;text-decoration:none}
+  .btn-s{border-color:var(--line);color:var(--text)}
+  .btn-s:hover{border-color:var(--cyan);text-decoration:none}
+
+  footer{padding:34px 0 46px;color:var(--muted);font-size:13px}
+  footer a{color:var(--muted);text-decoration:underline}
+  @media(max-width:640px){ header{padding:40px 0 28px} section{padding:40px 0} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/logo-ship.png" alt="项目标识">
+      <span>Trade Intelligence · 选品决策</span>
+    </div>
+    <h1>跨境电商<em>智能选品决策系统</em></h1>
+    <p class="lede">
+      面向中小跨境卖家的贸易决策智能：用多源信号回答「卖什么、卖到哪、怎么卖、是否值得卖」。
+      覆盖 <strong>132 个食品 SKU × 15 个市场 = 1,980 个组合</strong>，
+      输出三模型预测、六维评分与 Go / No-Go 判定。
+    </p>
+
+    <div class="kpis">
+      <div class="kpi b"><b>1,980</b><small>品类 × 市场组合</small></div>
+      <div class="kpi b"><b>205,920</b><small>周粒度观测行数 · 104 周</small></div>
+      <div class="kpi a"><b>356,400</b><small>预测条目 · 90 天 × 2 模型</small></div>
+      <div class="kpi g"><b>2.335%</b><small>LightGBM 进阶 MAPE</small></div>
+    </div>
+
+    <div class="cta">
+      <a class="btn btn-p" href="demo/">打开 UI 预览 →</a>
+      <a class="btn btn-s" href="https://github.com/Garvin666/trade-intelligence-system">查看源码仓库</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>系统规模与口径</h2>
+    <p class="sub">所有规模数字均由 <code>src/config.py</code> 的品类目录派生，不硬编码；下表为当前仓库的实际口径。</p>
+    <table>
+      <thead><tr><th>项目</th><th>口径</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>品类</td><td><code>132</code> 个食品 SKU</td><td>分属 12 大类：谷物主食 / 肉禽蛋奶 / 海鲜水产 / 果蔬 / 零食 / 坚果果干 / 调味酱料 / 饮料 / 烘焙 / 方便速食 / 保健 / 素食</td></tr>
+        <tr><td>市场</td><td><code>15</code> 个</td><td>us / eu / sea / jp / ca / au / uk / kr / de / fr / vn / ru / hu / ae / mx</td></tr>
+        <tr><td>组合</td><td><code>1,980</code></td><td>品类 × 市场</td></tr>
+        <tr><td>历史面板</td><td><code>205,920</code> 行</td><td>1,980 组合 × 104 周（2024-10-01 → 2026-09-22）</td></tr>
+        <tr><td>对照组</td><td>train 182,160 / holdout 23,760</td><td>1,980 组合 × 92 / 12 周，测试格 23,760</td></tr>
+        <tr><td>预测产物</td><td><code>356,400</code> 条</td><td>1,980 组合 × 90 天 × 2 模型</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>系统架构</h2>
+    <p class="sub">单进程统一后端同时提供 REST API、React 前端、MCP Server 与受管后台任务；预测、推荐、贸易决策共享同一份数据口径。</p>
+    <div class="grid">
+      <div class="card">
+        <h3>数据层</h3>
+        <p>合成时序面板 + 真实信号层（Google Trends、平台榜单、UN Comtrade 海关、Wikimedia 爬虫、Open Food Facts），统一归一化为 <code>date / category / market</code> 长表。</p>
+        <span class="tag">多源归一</span>
+      </div>
+      <div class="card">
+        <h3>预测层</h3>
+        <p>Prophet 基线、LightGBM 进阶、StatsForecast 第三基线并行；逐组合回测与区间估计，指标逐条落盘可核对。</p>
+        <span class="tag">三模型对照</span>
+      </div>
+      <div class="card">
+        <h3>决策层</h3>
+        <p>六维评分（需求 / 趋势 / 竞争 / 毛利 / 合规 / 证据）+ Go / Conditional / No-Go 判定，叠加政策、物流、IP、CBAM 与融资就绪。</p>
+        <span class="tag">可解释裁决</span>
+      </div>
+      <div class="card">
+        <h3>接口层</h3>
+        <p>FastAPI 统一入口：<code>/api/analyze</code>、<code>/api/recommendations</code>、<code>/api/trade/decision</code>、<code>/mcp</code>，含数据新鲜度闸门。</p>
+        <span class="tag">REST + MCP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>分析产出</h2>
+    <p class="sub">以下图表由 <code>scripts/run_data_analysis.py</code> 在 1,980 组合口径下自动生成。</p>
+    <div class="shots">
+      <figure>
+        <img src="assets/figures/category_market_sales.png" alt="品类 × 市场销量分布" loading="lazy">
+        <figcaption>品类 × 市场销量分布（132 SKU × 15 市场）</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/figures/forecast_interval.png" alt="预测区间" loading="lazy">
+        <figcaption>双模型预测与 80% 置信区间</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/figures/landed_cost.png" alt="到岸成本" loading="lazy">
+        <figcaption>物流方案到岸成本对比</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/figures/customs_exports.png" alt="海关出口" loading="lazy">
+        <figcaption>UN Comtrade 海关出口信号</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/figures/industry_market.png" alt="行业与市场" loading="lazy">
+        <figcaption>行业结构与目标市场对比</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/figures/dashboard_preview.png" alt="看板预览" loading="lazy">
+        <figcaption>数据看板界面</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>本地运行</h2>
+    <p class="sub">仓库不含运行期产物（<code>output/</code>、<code>models/*.csv</code>、<code>data/processed/</code>），克隆后按下列步骤再生成。</p>
+<pre><span class="c"># 1. 环境</span>
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+
+<span class="c"># 2. 数据 → 清洗 → 训练 → 预测 → 推荐</span>
+.venv\Scripts\python scripts\run_pipeline.py
+
+<span class="c"># 3. 统一后端（REST API + React 前端 + MCP + 后台任务）</span>
+.venv\Scripts\python scripts\run_api.py
+<span class="c"># 打开 http://127.0.0.1:8000/app</span>
+
+<span class="c"># 4. 数据分析报告与图表</span>
+.venv\Scripts\python scripts\run_data_analysis.py</pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>数据性质说明</h2>
+    <div class="note">
+      <b>须如实说明：</b>本仓库的<strong>主训练面板为程序合成的时序数据</strong>，<code>sales_volume</code> 是生成的目标变量。
+      因此上表中的 MAPE 等指标衡量的是模型对生成过程的拟合能力，<strong>不代表真实市场预测精度</strong>。
+      真实信号层（Trends / 平台榜单 / Comtrade / 爬虫）已接入快照链路，但覆盖率与时效性受免费数据源限制。
+      对外引用任何精度数字前，请先核对 <code>models/metrics.json</code> 与 <code>output/data_status.json</code> 的实际值。
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>UI 预览</h2>
+    <p class="sub">子页面为单文件离线前端，用于浏览界面与设计风格。</p>
+    <div class="note">
+      <b>功能限制：</b>该离线包<strong>不含 mock 数据层</strong>，页面内的 <code>/api/*</code> 请求在纯静态托管下会返回 404，
+      因此列表与图表可能为空。完整功能需在本地启动后端后访问 <code>/app</code>。
+    </div>
+    <div class="cta">
+      <a class="btn btn-p" href="demo/">我已了解，打开 UI 预览 →</a>
+      <a class="btn btn-s" href="https://github.com/Garvin666/trade-intelligence-system#readme">阅读 README</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    跨境电商智能选品决策系统 · MIT License ·
+    <a href="https://github.com/Garvin666/trade-intelligence-system">GitHub 仓库</a>
+  </div>
+</footer>
+
+</body>
+</html>
