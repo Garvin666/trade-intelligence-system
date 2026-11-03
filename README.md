@@ -1,5 +1,9 @@
 # 跨境电商智能选品决策系统
 
+**在线演示** ｜ [项目介绍页](https://garvin666.github.io/trade-intelligence-system/) ｜ [UI 预览](https://garvin666.github.io/trade-intelligence-system/demo/)
+
+> 介绍页含系统架构、数据口径与分析图表；UI 预览为单文件离线前端，仅用于浏览界面 —— 它不含 mock 数据层，`/api/*` 请求在纯静态托管下返回 404，完整功能需在本地启动后端后访问 `/app`。
+
 基于多源数据融合的跨境电商智能选品决策系统，面向中国国际大学生创新大赛（高教赛道·创意组）构建。
 
 ## 项目简介
