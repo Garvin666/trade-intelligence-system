@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>远帆智品 - 登录</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      background: #04070f;
+      color: #e6f1ff;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 95% at 82% -10%, rgba(34, 211, 238, 0.12), transparent 52%),
+        radial-gradient(95% 75% at 0% 112%, rgba(217, 119, 6, 0.06), transparent 56%),
+        radial-gradient(80% 70% at 52% 46%, rgba(124, 92, 207, 0.05), transparent 62%),
+        #03070f;
+    }
+    #bg canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    #bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        560px circle at var(--star-pointer-x, 50%) var(--star-pointer-y, 38%),
+        rgba(34, 211, 238, 0.06),
+        transparent 68%
+      );
+    }
+    #bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(3, 7, 15, 0.18), transparent 24%, transparent 74%, rgba(3, 7, 15, 0.58)),
+        radial-gradient(120% 100% at 50% 42%, transparent 58%, rgba(2, 5, 10, 0.5) 100%);
+    }
+    .login-wrap {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      width: min(92vw, 380px);
+      padding: 30px 28px 26px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      animation: fade-in 0.7s ease both;
+    }
+    .logo-wrap {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+    .logo {
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: 124px;
+      height: auto;
+      margin: 0;
+      animation: logo-fade-in 0.9s ease both;
+    }
+    @keyframes logo-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #f3f8ff;
+      text-align: center;
+      animation: fade-in 0.7s ease 0.2s both;
+    }
+    .en-name {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #9fb2cc;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      animation: fade-in 0.7s ease 0.28s both;
+    }
+    form {
+      animation: fade-in 0.7s ease 0.36s both;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    form { margin-top: 24px; display: grid; gap: 14px; }
+    label { display: grid; gap: 7px; font-size: 13px; color: #c7d5ea; }
+    input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid rgba(148, 197, 255, 0.25);
+      border-radius: 6px;
+      background: rgba(12, 22, 40, 0.72);
+      color: #f3f8ff;
+      font-size: 14px;
+      outline: none;
+    }
+    input:focus { border-color: #6ab7ff; box-shadow: 0 0 0 3px rgba(106, 183, 255, 0.16); }
+    button {
+      height: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #3b82f6, #22d3ee);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter 0.2s ease, transform 0.1s ease;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .error {
+      min-height: 20px;
+      font-size: 13px;
+      color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+  <div id="bg"></div>
+  <main class="login-wrap">
+    <section class="login-card" aria-label="登录">
+      <div class="logo-wrap">
+        <img class="logo" src="logo.png" alt="远帆智品">
+      </div>
+      <h1>远帆智品</h1>
+      <p class="en-name">Trade Intelligence</p>
+      <form id="login-form">
+        <label>
+          用户名
+          <input id="username" name="username" autocomplete="username" value="admin" required>
+        </label>
+        <label>
+          密码
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <p class="error" id="error" role="alert"></p>
+        <button type="submit" id="submit">登录</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    function mulberry32(seed) {
+      let state = seed >>> 0;
+      return () => {
+        state += 0x6d2b79f5;
+        let t = state;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function variantSeed(variant) {
+      let hash = 2166136261;
+      for (let i = 0; i < variant.length; i += 1) {
+        hash ^= variant.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    }
+
+    function initStarfield() {
+      const container = document.getElementById("bg");
+      if (!container) return;
+      const canvas = document.createElement("canvas");
+      container.appendChild(canvas);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rng = mulberry32(variantSeed("login"));
+      const accent = [34, 211, 238];
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      let width = Math.max(1, container.clientWidth || window.innerWidth);
+      let height = Math.max(1, container.clientHeight || window.innerHeight);
+      let visible = document.visibilityState === "visible";
+      let pointer = { x: 0.5, y: 0.5 };
+      const pointerSmooth = { x: 0.5, y: 0.5 };
+      const pointerVelocity = { x: 0, y: 0 };
+
+      function updateSize() {
+        width = Math.max(1, container.clientWidth || window.innerWidth);
+        height = Math.max(1, container.clientHeight || window.innerHeight);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+      }
+      updateSize();
+
+      const count = Math.round(
+        Math.min(300, Math.max(96, (width * height) / 15000)),
+      );
+      const stars = Array.from({ length: count }, () => {
+        const depth = Math.pow(rng(), 1.22);
+        const roll = rng();
+        const color =
+          roll < 0.54
+            ? [232, 240, 255]
+            : roll < 0.8
+              ? [255, 255, 255]
+              : roll < 0.93
+                ? accent
+                : [174, 198, 255];
+        return {
+          x: rng(),
+          y: rng(),
+          depth,
+          radius: (0.6 + rng() * 1.9) * (0.45 + depth * 1.05),
+          alpha: 0.4 + rng() * 0.5,
+          phase: rng() * Math.PI * 2,
+          speed: (0.03 + rng() * 0.055) * (0.5 + depth),
+          frequency: 1.2 + rng() * 2.2,
+          color,
+          bright: rng() < 0.065,
+        };
+      });
+
+      const dustCount = Math.round(
+        Math.min(28, Math.max(12, (width * height) / 90000)),
+      );
+      const dust = Array.from({ length: dustCount }, () => ({
+        x: rng(),
+        y: rng(),
+        radius: 80 + rng() * 160,
+        alpha: 0.08 + rng() * 0.08,
+        speed: 0.025 + rng() * 0.05,
+        phase: rng() * Math.PI * 2,
+        color: rng() < 0.7 ? accent : [176, 196, 255],
+      }));
+
+      let meteor = null;
+      let meteorTimer = 0.9 + rng() * 1.2;
+      const positions = new Float32Array(stars.length * 2);
+      let raf = 0;
+      let lastDraw = performance.now();
+
+      function spawnMeteor() {
+        const fromLeft = rng() > 0.5;
+        meteor = {
+          x: fromLeft ? -60 : width + 60,
+          y: rng() * height * 0.52,
+          vx: (fromLeft ? 1 : -1) * (2.6 + rng() * 2.2) * 95,
+          vy: (1.7 + rng() * 1.5) * 85,
+          age: 0,
+          life: 0.6 + rng() * 0.6,
+          length: 140 + rng() * 140,
+        };
+      }
+
+      function wrap(value, size) {
+        return ((value % size) + size) % size;
+      }
+
+      function drawStar(star, x, y, time) {
+        const twinkle =
+          reduced ? 1 : 0.5 + 0.5 * Math.sin(time * star.frequency + star.phase);
+        const alpha = star.alpha * twinkle;
+        if (alpha < 0.02) return;
+        const [r, g, b] = star.color;
+
+        ctx.beginPath();
+        ctx.arc(x, y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        ctx.fill();
+
+        if (star.bright && !reduced) {
+          const flare = star.radius * 5.2;
+          ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(alpha * 0.34).toFixed(3)})`;
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(x - flare, y);
+          ctx.lineTo(x + flare, y);
+          ctx.moveTo(x, y - flare);
+          ctx.lineTo(x, y + flare);
+          ctx.stroke();
+        }
+      }
+
+      function drawDust(time, offsetX, offsetY) {
+        for (const mote of dust) {
+          const x = wrap(
+            mote.x * width +
+              offsetX * 0.8 +
+              Math.sin(time * (0.08 + mote.speed * 1.6) + mote.phase) *
+                (70 + mote.speed * 1300),
+            width,
+          );
+          const y = wrap(
+            mote.y * height +
+              offsetY * 0.5 +
+              Math.cos(time * (0.06 + mote.speed * 1.4) + mote.phase) *
+                (58 + mote.speed * 1150),
+            height,
+          );
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, mote.radius);
+          gradient.addColorStop(
+            0,
+            `rgba(${mote.color[0]}, ${mote.color[1]}, ${mote.color[2]}, ${mote.alpha.toFixed(3)})`,
+          );
+          gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x - mote.radius, y - mote.radius, mote.radius * 2, mote.radius * 2);
+        }
+      }
+
+      function draw(now) {
+        const dt = Math.min((now - lastDraw) / 1000, 0.05);
+        lastDraw = now;
+        if (!visible) {
+          raf = window.requestAnimationFrame(draw);
+          return;
+        }
+
+        const time = now / 1000;
+        const smoothFactor = reduced ? 1 : Math.min(1, dt * 4.2);
+        pointerSmooth.x += (pointer.x - pointerSmooth.x) * smoothFactor;
+        pointerSmooth.y += (pointer.y - pointerSmooth.y) * smoothFactor;
+        pointerVelocity.x *= 0.9;
+        pointerVelocity.y *= 0.9;
+        const offsetX = (pointerSmooth.x - 0.5) * 26;
+        const offsetY = (pointerSmooth.y - 0.5) * 16;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < stars.length; i += 1) {
+          const star = stars[i];
+          let x = wrap(
+            star.x * width +
+              offsetX * star.depth +
+              time * star.speed * star.depth * 1100 +
+              Math.sin(time * 0.3 + star.phase) * star.depth * 40,
+            width,
+          );
+          let y = wrap(
+            star.y * height +
+              offsetY * star.depth * 0.7 +
+              time * star.speed * star.depth * 650 +
+              Math.cos(time * 0.26 + star.phase * 1.3) * star.depth * 30,
+            height,
+          );
+
+          if (!reduced) {
+            const influence = 116 + star.depth * 132;
+            const dx = x - pointer.x * width;
+            const dy = y - pointer.y * height;
+            const distanceSquared = dx * dx + dy * dy;
+            if (distanceSquared < influence * influence) {
+              const distance = Math.sqrt(distanceSquared) || 1;
+              const closeness = 1 - distance / influence;
+              const pointerSpeed = Math.min(
+                1,
+                Math.hypot(pointerVelocity.x, pointerVelocity.y) * 2.4,
+              );
+              const push = closeness * closeness * star.depth * (13 + pointerSpeed * 8);
+              x = wrap(x + (dx / distance) * push, width);
+              y = wrap(y + (dy / distance) * push * 0.55, height);
+            }
+          }
+
+          positions[i * 2] = x;
+          positions[i * 2 + 1] = y;
+        }
+
+        drawDust(time, offsetX, offsetY);
+
+        if (!reduced) {
+          for (let i = 0; i < stars.length; i += 1) {
+            const a = stars[i];
+            if (a.depth < 0.3) continue;
+            for (let j = i + 1; j < stars.length; j += 1) {
+              const b = stars[j];
+              if (b.depth < 0.3) continue;
+              const dx = positions[i * 2] - positions[j * 2];
+              const dy = positions[i * 2 + 1] - positions[j * 2 + 1];
+              const maxDistance = 108 + (a.depth + b.depth) * 42;
+              const distanceSquared = dx * dx + dy * dy;
+              if (distanceSquared > maxDistance * maxDistance) continue;
+              const distance = Math.sqrt(distanceSquared) || 1;
+              const alpha = (1 - distance / maxDistance) * 0.16;
+              ctx.strokeStyle = `rgba(${accent[0]}, ${accent[1]}, ${accent[2]}, ${alpha.toFixed(3)})`;
+              ctx.lineWidth = 0.6;
+              ctx.beginPath();
+              ctx.moveTo(positions[i * 2], positions[i * 2 + 1]);
+              ctx.lineTo(positions[j * 2], positions[j * 2 + 1]);
+              ctx.stroke();
+            }
+          }
+        }
+
+        for (let i = 0; i < stars.length; i += 1) {
+          drawStar(stars[i], positions[i * 2], positions[i * 2 + 1], time);
+        }
+
+        if (!reduced) {
+          meteorTimer -= dt;
+          if (meteorTimer <= 0) {
+            spawnMeteor();
+            meteorTimer = 2 + rng() * 3;
+          }
+          if (meteor) {
+            meteor.age += dt;
+            if (meteor.age >= meteor.life) {
+              meteor = null;
+            } else {
+              meteor.x += meteor.vx * dt;
+              meteor.y += meteor.vy * dt;
+              const progress = meteor.age / meteor.life;
+              const alpha = (1 - progress) * 0.9;
+              const tx = meteor.x - (meteor.vx / Math.max(60, Math.abs(meteor.vx))) * meteor.length;
+              const ty = meteor.y - (meteor.vy / Math.max(60, Math.abs(meteor.vy))) * meteor.length;
+              const gradient = ctx.createLinearGradient(meteor.x, meteor.y, tx, ty);
+              gradient.addColorStop(
+                0,
+                `rgba(${accent[0]}, ${accent[1]}, ${accent[2]}, ${alpha.toFixed(3)})`,
+              );
+              gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+              ctx.strokeStyle = gradient;
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.moveTo(meteor.x, meteor.y);
+              ctx.lineTo(tx, ty);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(meteor.x, meteor.y, 1.25, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.9).toFixed(3)})`;
+              ctx.fill();
+            }
+          }
+        }
+
+        raf = window.requestAnimationFrame(draw);
+      }
+
+      function onPointerMove(event) {
+        const nextX = event.clientX / Math.max(window.innerWidth, 1);
+        const nextY = event.clientY / Math.max(window.innerHeight, 1);
+        pointerVelocity.x = nextX - pointer.x;
+        pointerVelocity.y = nextY - pointer.y;
+        pointer = { x: nextX, y: nextY };
+        container.style.setProperty("--star-pointer-x", `${event.clientX}px`);
+        container.style.setProperty("--star-pointer-y", `${event.clientY}px`);
+      }
+
+      function onVisibility() {
+        visible = document.visibilityState === "visible";
+      }
+
+      function onResize() {
+        updateSize();
+      }
+
+      function onPageHide() {
+        window.cancelAnimationFrame(raf);
+      }
+
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      document.addEventListener("visibilitychange", onVisibility);
+      window.addEventListener("resize", onResize);
+      window.addEventListener("pagehide", onPageHide);
+
+      raf = window.requestAnimationFrame(draw);
+    }
+
+    document.addEventListener("DOMContentLoaded", initStarfield);
+
+    const form = document.getElementById("login-form");
+    const errorBox = document.getElementById("error");
+    const submit = document.getElementById("submit");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.textContent = "";
+      submit.disabled = true;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      try {
+        const response = await fetch("api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        if (response.status === 401) {
+          errorBox.textContent = "用户名或密码错误";
+          return;
+        }
+        if (!response.ok) {
+          errorBox.textContent = "登录失败，请稍后重试";
+          return;
+        }
+        const data = await response.json();
+        localStorage.setItem("smart_agent_token", data.access_token);
+        localStorage.setItem("smart_agent_username", username);
+        const target = location.pathname.startsWith("/agent/")
+          ? "../app/"
+          : `http://${location.hostname}:8000/app/`;
+        location.href = target;
+      } catch (error) {
+        errorBox.textContent = "网络异常，请检查后端是否已启动";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{
+  "model": "global",
+  "label": "全局 AI（deepseek-v4-flash）",
+  "api_model_id": "deepseek-v4-flash",
+  "base_url": "https://api.deepseek.com/v1",
+  "run": 2,
+  "mode": "lite",
+  "scope": {
+    "mode": "lite",
+    "combos": [
+      [
+        "home",
+        "us"
+      ],
+      [
+        "pet",
+        "sea"
+      ],
+      [
+        "fitness",
+        "eu"
+      ],
+      [
+        "small_appliance",
+        "jp"
+      ],
+      [
+        "outdoor",
+        "ca"
+      ],
+      [
+        "beauty",
+        "au"
+      ],
+      [
+        "baby",
+        "uk"
+      ],
+      [
+        "kitchen",
+        "kr"
+      ],
+      [
+        "office",
+        "de"
+      ],
+      [
+        "toys",
+        "fr"
+      ],
+      [
+        "electronics",
+        "vn"
+      ],
+      [
+        "automotive",
+        "mx"
+      ]
+    ],
+    "total_cells": 144
+  },
+  "batch_total": 1,
+  "attempts": 1,
+  "completeness": {
+    "core_insights": true,
+    "forecast": true,
+    "top5": true,
+    "method": true,
+    "complete": true,
+    "missing": [],
+    "forecast_rows": 144,
+    "top5_count": 5
+  },
+  "source": "api",
+  "temperature": 0.2,
+  "code_execution": false,
+  "timestamp_utc": "2026-08-19T06:56:41+00:00",
+  "prompt_file": "E:\\大创\\data\\control\\prompt.md",
+  "prompt_sha256": "6821a85734a50987db3524c883254d494382d1c38663561ca54415d5d5eeb81e",
+  "train_csv": "E:\\大创\\data\\control\\train_data.csv",
+  "train_csv_sha256": "32e195b6fb592108076e5d756002143777b3162a1305f0ac16aba44192c22b20",
+  "github_signals_file": "E:\\大创\\output\\control\\github_signals.json",
+  "github_signals_sha256": "c903a568231d7819ac345232d80c7128262e82a6388589d280784b2048922947"
+}

@@ -1,0 +1,77 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+tmp/
+.env
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+models/*.joblib
+models/*.json
+models/*.csv
+.streamlit/secrets.toml
+.DS_Store
+
+# ---- 运行期缓存 / 大文件 / 临时工作区（不入库）----
+storage/
+crawlee_storage/
+data/external/hf/
+output/crawler/crawlee_storage/
+output/export/dashboard_selection_report_2*
+output/export/launch_report_*
+.scratch/
+.design/
+# 设计素材调研源码存档（Codex 学习用，不入库）
+globe_research_tmp/
+
+# ---- 生成物：output 全部不入库（由脚本再生成）----
+output/
+
+# ---- 分发副本：不入库（build_runpack.py --clean 再生成 / 材料包人工维护）----
+发布与材料/
+
+# ---- 外部数据集：只保留 Markdown 来源清单/说明，数据文件不入库 ----
+data/external/**
+!data/external/**/
+!data/external/**/*.[Mm][Dd]
+data/backend_state.db
+
+# ---- 训练数据集：只保留下载脚本与说明 ----
+训练数据集/data/
+
+# ---- 根级材料文档（正式申报/答辩材料，建议归档到 发布与材料/提交材料包）----
+*.docx
+*.pdf
+*.mp4
+!docs/**/*.docx
+!docs/**/*.pdf
+!docs/**/*.mp4
+
+# ---- 个人工作区（与仓库无关）----
+.business/
+.pm/
+.dsh-vision-toolkit/
+
+# ---- Node / 前端构建产物（2026-11-03 补）----
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/dist-offline/
+frontend/tmp/
+
+# ---- 任务留痕与本地记忆（含大数据备份与本机路径，不入库）----
+tasks/**/backup/
+tasks/**/tmp/
+.workbuddy/
+
+# ---- 日志与临时 ----
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ---- 分发压缩包（构建产出的打包件，不入库）----
+项目作品集/*.zip

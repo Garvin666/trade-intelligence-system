@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境电商智能选品决策系统 - 项目导航</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --line:#334155; --txt:#e2e8f0; --dim:#94a3b8; --acc:#38bdf8; --ok:#34d399; --warn:#fbbf24; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--txt); font-family:"Segoe UI","Microsoft YaHei",sans-serif; padding:40px 24px; line-height:1.7; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:26px; margin-bottom:6px; letter-spacing:.5px; }
+  .sub { color:var(--dim); font-size:14px; margin-bottom:30px; }
+  .badge { display:inline-block; background:rgba(56,189,248,.12); color:var(--acc); border:1px solid rgba(56,189,248,.3); border-radius:20px; padding:2px 12px; font-size:12px; margin-right:8px; }
+  h2 { font-size:18px; margin:30px 0 12px; padding-left:10px; border-left:3px solid var(--acc); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .card b { display:block; color:var(--acc); font-size:14px; margin-bottom:4px; }
+  .card span { color:var(--dim); font-size:12px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--acc); font-weight:600; }
+  td.name { font-family:Consolas,monospace; font-size:12.5px; }
+  code { background:#0b1220; border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-size:12px; color:#a5f3fc; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); }
+  .note { background:rgba(251,191,36,.08); border:1px solid rgba(251,191,36,.25); border-radius:8px; padding:10px 14px; font-size:13px; color:#fde68a; margin-top:10px; }
+  .footer { margin-top:40px; color:var(--dim); font-size:12px; border-top:1px solid var(--line); padding-top:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📦 跨境电商智能选品决策系统 — 项目导航</h1>
+  <div class="sub"><span class="badge">生成于 2026-08-16 14:00</span><span class="badge">整理会话 20260816-1359</span>面向中小跨境卖家的选品与贸易决策智能（Trade Intelligence）</div>
+
+  <h2>顶层结构</h2>
+  <div class="grid">
+    <div class="card"><b>src/</b><span>核心源码：数据、特征、模型、四脑引擎、贸易决策、API、看板</span></div>
+    <div class="card"><b>scripts/</b><span>一键脚本：管线、训练、日报、政策雷达、对照组评测</span></div>
+    <div class="card"><b>tests/</b><span>测试套件（374 项通过）+ fixtures</span></div>
+    <div class="card"><b>frontend/</b><span>React 前端（构建到 output/app）</span></div>
+    <div class="card"><b>docs/</b><span>项目文档、调研、报告归档、图表</span></div>
+    <div class="card"><b>data/</b><span>原始/加工/外部数据（含 HuggingFace、GitHub 公开数据集）</span></div>
+    <div class="card"><b>models/</b><span>训练产物：预测、推荐、真实需求代理模型</span></div>
+    <div class="card"><b>output/</b><span>运行产物：看板、快照、日报、对照组、爬虫结果</span></div>
+    <div class="card"><b>发布与材料/</b><span>两个对外分发包：完整 Demo 运行包、提交材料包</span></div>
+    <div class="card"><b>训练数据集/</b><span>数据集下载脚本与说明</span></div>
+    <div class="card"><b>third_party/</b><span>GitHub 同类开源项目 License 审计与来源记录</span></div>
+    <div class="card"><b>assets/</b><span>品牌资源（logo 图片）</span></div>
+  </div>
+
+  <h2>文档导航（docs/）</h2>
+  <table>
+    <tr><th>类别</th><th>文件</th></tr>
+    <tr><td>项目文档</td><td class="name">README.md · AGENTS.md · CONTEXT.md · 项目概述_任务书.docx · 项目大纲.md · 项目实施计划书.docx · 技术文档.md · 数据字典.md · 项目内容分类总览.md</td></tr>
+    <tr><td>分析报告</td><td class="name">数据分析报告.md · 对照组分析报告.md · Demo优缺点评估报告.md · 项目优势报告.md</td></tr>
+    <tr><td>调研</td><td class="name">GitHub同类项目调研.md · GitHub同类项目可借鉴内容.md · 开源爬虫项目调研与接入方案.md · 旅易宝参赛材料学习与借鉴要点.md</td></tr>
+    <tr><td>商业/路演</td><td class="name">商业计划书.md · 路演大纲.md</td></tr>
+    <tr><td>报告归档</td><td class="name">报告归档/开发报告/（后端设计/构建流程/交付报告）· 报告归档/代码解析报告/（6 篇）· 报告归档/建议报告/（3 篇）</td></tr>
+    <tr><td>其他</td><td class="name">figures/（图表与预览截图）· mcp/ · skill/</td></tr>
+  </table>
+
+  <h2>本次整理（20260816-1359）</h2>
+  <table>
+    <tr><th>操作</th><th>内容</th><th>状态</th></tr>
+    <tr><td>移动 ×7</td><td class="name">3 份后端报告 → docs/报告归档/开发报告/ · 项目概述_任务书.docx → docs/ · 3 张预览截图 → docs/figures/</td><td class="ok">✓ 完成</td></tr>
+    <tr><td>清理 ×1 目录</td><td class="name">发布与材料/完整Demo运行包/完整Demo运行包/（外层纯子集，内层独有 0 文件）</td><td class="ok">✓ 完成</td></tr>
+    <tr><td>清理 tmp/</td><td class="name">142 个子目录与日志/pid/截图/状态文件 → 待清理区（保留顶层诊断脚本 .py/.txt）</td><td class="ok">✓ 完成</td></tr>
+    <tr><td>清理杂项</td><td class="name">logo.jpg（与 assets/ 重复）· tmp_git_add_dryrun.txt（git 试运行输出）· 空目录 训练数据集/data/product-reviews-sentiment/</td><td class="ok">✓ 完成</td></tr>
+    <tr><td>保留待续</td><td class="name">tmp/complete-demo-backend.log 与 .err.log（后端进程占用，停止后可再清理）</td><td class="warn">⏳ 2 项</td></tr>
+  </table>
+  <div class="note">⚠️ 所有清理项均移至 <code>.dsh-organize/待清理-20260816-1359/</code>（531.4 MB），未删除任何文件。回滚脚本：<code>.dsh-organize/rollback-20260816-1359.ps1</code></div>
+
+  <div class="footer">跨境电商智能选品决策系统 · 项目导航由文件夹整理流程生成 · 生成时间 2026-08-16 14:00</div>
+</div>
+</body>
+</html>

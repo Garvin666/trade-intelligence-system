@@ -1,0 +1,81 @@
+meta:
+  任务: "将项目内残留的 66 旧消费品类口径统一为 132 食品品类口径（205,920 行 = 132 品类 × 15 市场 × 104 周）"
+  工作区根: "E:/ChatGPT/跨境电商"
+  创建时间: "2026-11-03 22:55"
+  任务层级: "L1"
+  确认表: "L1 快速通道：用户 2026-11-03 22:44 明确指令「将66个品类删掉换成新的我引用的内容」，引用口径为 205,920 行 = 132 品类 × 15 市场 × 104 周；范围由只读侦察确定，无方案分歧。《本次确认表》即本条与用户原指令。"
+  验证信号: "① 复扫后当前有效文件命中归零（历史归档与误报除外）② 对照组 train/holdout 组合数=1980、holdout=23,760 行 ③ 前端 vitest 通过 ④ 改动文件 py_compile / tsc 无新增错误"
+  复盘沉淀: "① 口径类数字必须从 len(CATEGORIES)×len(MARKETS) 派生，禁止硬编码 66/990/102960/11880 ② 带日期后缀的历史报告属留痕，不改写，只改当前有效文档 ③ 只查行数不查 combos 会误判数据集口径（本轮曾据此错报对照组为 1980×52 周）"
+  越界授权:
+    - 路径: "E:/知识库/20261103-跨境电商66品类口径统一/工作报告.md"
+      依据: "用户 custom instruction 3 与 6：对话产生的文件与每次工作报告统一存 E:\\知识库（持续授权）"
+      时间: "2026-11-03 23:10"
+  反思重试配置:
+    最大重试次数: 3
+    终止策略: 升级返修复查
+
+steps:
+  - id: 1
+    做什么: 备份全部待改动文件，保证可回滚
+    输入: tmp/residual_66_scan.json 的候选清单
+    预期产出: backup/ 下按原相对路径存放的副本 + MANIFEST.txt 记录 sha256
+    验证方式: MANIFEST.txt 条目数 = 实际备份文件数，逐项 sha256 校验一致
+    状态: 完成
+    交付物: "tasks/口径统一-132食品品类-2026-11-03/backup/MANIFEST.txt"
+    模型档位: cheap
+  - id: 2
+    做什么: 重建对照组训练/留出集为 132 食品口径（1980 组合）
+    输入: data/processed/clean_data_real.csv（已为 1980 组合 × 104 周）
+    预期产出: train_data.csv 1980×92=182,160 行；holdout_data.csv 1980×12=23,760 行；prompt.md 口径同步
+    验证方式: 读回校验 combos=1980、holdout 行数=23,760、category 全部落在 132 食品目录内
+    状态: 完成
+    交付物: "data/control/train_data.csv"
+    模型档位: mid
+  - id: 3
+    做什么: 统一 Python 侧与生成器的旧口径常量
+    输入: scripts/build_advisor_doc.py、scripts/build_coverage_report.py、src/control/benchmark.py
+    预期产出: 66/990/102960/11880/178200 等硬编码改为 132/1980/205920/23760/356400 或由 len(CATEGORIES) 派生
+    验证方式: py_compile 通过 + 复扫这三文件残留归零
+    状态: 完成
+    交付物: "scripts/build_advisor_doc.py"
+    模型档位: mid
+  - id: 4
+    做什么: 统一 React 前端展示文案与相关测试断言
+    输入: frontend/src 下 7 个源文件 + 4 个测试文件
+    预期产出: 页面文案改为 132 品类 × 15 市场 · 1980 组合 · 205,920 行 · 23,760 格 · 356,400 条预测
+    验证方式: 复扫前端残留归零 + vitest 相关用例通过
+    状态: 完成
+    交付物: "frontend/src/shared/motion/Page3DSceneStatic.tsx"
+    模型档位: mid
+  - id: 5
+    做什么: 统一当前有效文档与 README/AGENTS 的口径描述
+    输入: README.md、AGENTS.md、docs/ 下 10 个无日期后缀文档
+    预期产出: 全部改为 132/1980/205,920/23,760 口径；历史归档文件不动
+    验证方式: 复扫当前有效文件命中归零
+    状态: 完成
+    交付物: "README.md"
+    模型档位: cheap
+  - id: 6
+    做什么: 重跑本地生成器，令清单与索引随真实数据刷新
+    输入: scripts/build_datasets_inventory.py、scripts/build_datasets_index.py
+    预期产出: data/datasets_manifest.json、output/datasets_inventory.json、data/DATASETS_INDEX.md 均为 132 口径
+    验证方式: 三个产物中 categories 字段=132、组合数=1980、行数=205,920
+    状态: 完成
+    交付物: "data/DATASETS_INDEX.md"
+    模型档位: cheap
+  - id: 7
+    做什么: 全量复扫与回归验证，产出验证报告
+    输入: 步骤 1-6 的产物
+    预期产出: 验证报告含残留归零证据、数据行数证据、测试输出
+    验证方式: 报告中每项均附原始输出摘录，无「我认为」式结论
+    状态: 完成
+    交付物: "tasks/口径统一-132食品品类-2026-11-03/验证报告.md"
+    模型档位: cheap
+  - id: 8
+    做什么: 写工作报告到知识库
+    输入: 步骤 7 的验证报告
+    预期产出: E:/知识库 下的工作报告（用户 custom instruction 6 要求）
+    验证方式: 文件存在且可读
+    状态: 完成
+    交付物: "E:/知识库/20261103-跨境电商66品类口径统一/工作报告.md"
+    模型档位: cheap

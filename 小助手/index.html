@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小助手</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: #04070f;
+      color: #e6f1ff;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+    #bg { position: fixed; inset: 0; z-index: 0; }
+    #bg canvas { display: block; }
+    #star-trail {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      pointer-events: none;
+    }
+    .brand { font-size: 16px; font-weight: 700; color: #f3f8ff; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+    .logout {
+      pointer-events: auto;
+      height: 36px;
+      padding: 0 14px;
+      border: 1px solid rgba(148, 197, 255, 0.28);
+      border-radius: 6px;
+      background: rgba(8, 15, 28, 0.5);
+      color: #dbe8fa;
+      font-size: 13px;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .logout:hover { background: rgba(37, 62, 96, 0.65); }
+    .chat-panel {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 4;
+      width: min(420px, calc(100vw - 32px));
+      height: min(640px, calc(100vh - 96px));
+      min-height: 420px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid rgba(148, 197, 255, 0.22);
+      border-radius: 8px;
+      background: rgba(8, 15, 28, 0.62);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(148, 197, 255, 0.14);
+    }
+    .panel-title { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 700; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.8); }
+    .dot.busy { background: #fbbf24; box-shadow: 0 0 10px rgba(251,191,36,0.8); }
+    .ghost-btn {
+      border: 1px solid rgba(148, 197, 255, 0.2);
+      border-radius: 6px;
+      background: transparent;
+      color: #9fb2cc;
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    .ghost-btn:hover { color: #e6f1ff; background: rgba(255,255,255,0.06); }
+    .messages {
+      overflow-y: auto;
+      padding: 14px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+    .bubble {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .bubble.user {
+      justify-self: end;
+      background: rgba(59, 130, 246, 0.28);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    .bubble.assistant {
+      justify-self: start;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .tool-line {
+      justify-self: start;
+      max-width: 100%;
+      padding: 8px 10px;
+      border-left: 2px solid #22d3ee;
+      background: rgba(34, 211, 238, 0.07);
+      color: #9fdbea;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .typing {
+      justify-self: start;
+      color: #7dd3fc;
+      font-size: 12px;
+      padding: 6px 2px;
+    }
+    .error-line { color: #fca5a5; font-size: 12px; padding: 6px 2px; }
+    .composer {
+      display: grid;
+      gap: 10px;
+      padding: 12px 14px;
+      border-top: 1px solid rgba(148, 197, 255, 0.14);
+    }
+    textarea {
+      width: 100%;
+      height: 64px;
+      resize: none;
+      padding: 10px 12px;
+      border: 1px solid rgba(148, 197, 255, 0.24);
+      border-radius: 6px;
+      background: rgba(12, 22, 40, 0.72);
+      color: #f3f8ff;
+      font-size: 13px;
+      line-height: 1.5;
+      outline: none;
+      font-family: inherit;
+    }
+    textarea:focus { border-color: #6ab7ff; }
+    .send-row { display: flex; justify-content: flex-end; }
+    .send {
+      height: 36px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #3b82f6, #22d3ee);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .send:disabled { opacity: 0.5; cursor: not-allowed; }
+    @media (max-width: 560px) {
+      .chat-panel { right: 16px; left: 16px; bottom: 16px; width: auto; height: calc(100vh - 120px); }
+      .topbar { padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="bg"></div>
+  <canvas id="star-trail" aria-hidden="true"></canvas>
+  <header class="topbar">
+    <span class="brand">小助手</span>
+    <button class="logout" id="logout" type="button">退出</button>
+  </header>
+
+  <main class="chat-panel" aria-label="小助手对话">
+    <div class="panel-head">
+      <div class="panel-title">
+        <span class="dot" id="status-dot"></span>
+        <span id="panel-title">小助手对话</span>
+      </div>
+      <button class="ghost-btn" id="clear" type="button">清空</button>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="composer">
+      <textarea id="input" placeholder="输入你的问题..." rows="2"></textarea>
+      <div class="send-row">
+        <button class="send" id="send" type="button">发送</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    function initParticleBackground() {
+      const container = document.getElementById("bg");
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
+      camera.position.z = 10;
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setSize(innerWidth, innerHeight);
+      container.appendChild(renderer.domElement);
+
+      function makePoints(color, count, spread, size) {
+        const positions = new Float32Array(count * 3);
+        for (let i = 0; i < count; i += 1) {
+          positions[i * 3] = (Math.random() - 0.5) * spread;
+          positions[i * 3 + 1] = (Math.random() - 0.5) * spread;
+          positions[i * 3 + 2] = (Math.random() - 0.5) * spread;
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+          color,
+          size,
+          transparent: true,
+          opacity: 0.55,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+        return new THREE.Points(geometry, material);
+      }
+
+      const starsA = makePoints(0x7dd3fc, 1600, 18, 0.01);
+      const starsB = makePoints(0xa78bfa, 900, 15, 0.016);
+      scene.add(starsA, starsB);
+
+      function makeGlow(color, x, y, z, scale, opacity) {
+        const canvas = document.createElement("canvas");
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext("2d");
+        const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+        gradient.addColorStop(0, "#ffffff");
+        gradient.addColorStop(0.35, color);
+        gradient.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 128, 128);
+        const texture = new THREE.CanvasTexture(canvas);
+        const sprite = new THREE.Sprite(
+          new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+            opacity,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+          })
+        );
+        sprite.position.set(x, y, z);
+        sprite.scale.set(scale, scale, 1);
+        scene.add(sprite);
+      }
+
+      makeGlow("#3b82f6", -4, 2.2, -6, 9, 0.2);
+      makeGlow("#8b5cf6", 4.5, -2.5, -8, 11, 0.17);
+      makeGlow("#22d3ee", 0.5, 4.2, -10, 7, 0.15);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        starsA.rotation.y += 0.00025;
+        starsA.rotation.x += 0.00005;
+        starsB.rotation.y -= 0.00018;
+        starsB.rotation.z += 0.00004;
+        camera.position.x = Math.sin(Date.now() * 0.0001) * 0.5;
+        camera.position.y = Math.cos(Date.now() * 0.0001) * 0.3;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      addEventListener("resize", () => {
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(innerWidth, innerHeight);
+      });
+      animate();
+    }
+
+    const TOKEN_KEY = "smart_agent_token";
+    const messagesEl = document.getElementById("messages");
+    const inputEl = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
+    const clearBtn = document.getElementById("clear");
+    const logoutBtn = document.getElementById("logout");
+    const statusDot = document.getElementById("status-dot");
+    const panelTitle = document.getElementById("panel-title");
+
+    let busy = false;
+
+    function goLogin() {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem("smart_agent_username");
+      location.href = "login.html";
+    }
+
+    async function authFetch(path, options = {}) {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (!token) {
+        goLogin();
+        throw new Error("unauthorized");
+      }
+      const response = await fetch(path, {
+        ...options,
+        headers: {
+          ...(options.headers || {}),
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.status === 401) {
+        goLogin();
+        throw new Error("unauthorized");
+      }
+      return response;
+    }
+
+    function setBusy(value) {
+      busy = value;
+      sendBtn.disabled = value;
+      inputEl.disabled = value;
+      statusDot.classList.toggle("busy", value);
+      panelTitle.textContent = value ? "小助手执行中" : "小助手对话";
+    }
+
+    function addMessage(role, content) {
+      const el = document.createElement("div");
+      el.className = `bubble ${role}`;
+      el.textContent = content;
+      messagesEl.appendChild(el);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return el;
+    }
+
+    function addToolLine(payload) {
+      const el = document.createElement("div");
+      el.className = "tool-line";
+      const args = payload.args ? JSON.stringify(payload.args) : "{}";
+      el.textContent = `工具 ${payload.tool || "get_market_info"} 参数 ${args}\n${payload.result_preview || ""}`;
+      messagesEl.appendChild(el);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function showError(message) {
+      const el = document.createElement("div");
+      el.className = "error-line";
+      el.textContent = message || "小助手执行失败";
+      messagesEl.appendChild(el);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text || busy) return;
+      inputEl.value = "";
+      addMessage("user", text);
+      setBusy(true);
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.textContent = "小助手正在思考...";
+      messagesEl.appendChild(typing);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      try {
+        const response = await authFetch("api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        if (!response.ok) {
+          typing.remove();
+          let detail = `请求失败 (${response.status})`;
+          try {
+            const data = await response.json();
+            if (data.detail) detail = typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
+          } catch (error) { /* 保留默认错误信息 */ }
+          showError(detail);
+          setBusy(false);
+          return;
+        }
+
+        typing.remove();
+        let assistantEl = null;
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        function handleEvent(eventName, data) {
+          if (eventName === "tool") {
+            addToolLine(data);
+          } else if (eventName === "delta") {
+            if (!assistantEl) assistantEl = addMessage("assistant", "");
+            assistantEl.textContent += data.content || "";
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+          } else if (eventName === "error") {
+            showError(data.message);
+          } else if (eventName === "done") {
+            if (!assistantEl && data.content) {
+              assistantEl = addMessage("assistant", data.content);
+            }
+            setBusy(false);
+          }
+        }
+
+        function flushBuffer(partial) {
+          let index;
+          while ((index = buffer.indexOf("\n\n")) !== -1) {
+            const raw = buffer.slice(0, index);
+            buffer = buffer.slice(index + 2);
+            let eventName = "";
+            let dataText = "";
+            for (const line of raw.split("\n")) {
+              if (line.startsWith("event:")) eventName = line.slice(6).trim();
+              if (line.startsWith("data:")) dataText += line.slice(5).trim();
+            }
+            if (!dataText) continue;
+            try {
+              handleEvent(eventName, JSON.parse(dataText));
+            } catch (error) { /* 忽略无法解析的事件 */ }
+          }
+          if (partial) return;
+          if (buffer.trim()) {
+            let eventName = "";
+            let dataText = "";
+            for (const line of buffer.split("\n")) {
+              if (line.startsWith("event:")) eventName = line.slice(6).trim();
+              if (line.startsWith("data:")) dataText += line.slice(5).trim();
+            }
+            if (dataText) {
+              try {
+                handleEvent(eventName, JSON.parse(dataText));
+              } catch (error) { /* 忽略无法解析的事件 */ }
+            }
+            buffer = "";
+          }
+        }
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          flushBuffer(true);
+        }
+        flushBuffer(false);
+        setBusy(false);
+      } catch (error) {
+        typing.remove();
+        if (error && error.message !== "unauthorized") showError("网络异常，请检查后端连接");
+        setBusy(false);
+      }
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    inputEl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+    clearBtn.addEventListener("click", () => {
+      messagesEl.innerHTML = "";
+    });
+    logoutBtn.addEventListener("click", goLogin);
+
+    function initStarTrail() {
+      const canvas = document.getElementById("star-trail");
+      const ctx = canvas.getContext("2d");
+      if (!canvas || !ctx) return;
+      let points = [];
+      let lastPush = 0;
+
+      function resize() {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+      }
+      resize();
+
+      function push(x, y) {
+        const now = performance.now();
+        if (now - lastPush < 14) return;
+        lastPush = now;
+        points.push({ x, y, life: 1, maxLife: 1 });
+        if (points.length > 48) points.splice(0, points.length - 48);
+      }
+
+      function onMove(event) {
+        push(event.clientX, event.clientY);
+      }
+
+      function onTouch(event) {
+        const touch = event.touches[0];
+        if (!touch) return;
+        push(touch.clientX, touch.clientY);
+      }
+
+      function tick() {
+        requestAnimationFrame(tick);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        for (const point of points) point.life -= 0.018;
+        points = points.filter((point) => point.life > 0);
+
+        if (points.length > 1) {
+          for (let i = 1; i < points.length; i += 1) {
+            const previous = points[i - 1];
+            const current = points[i];
+            const ratio = Math.max(0, current.life / current.maxLife);
+            ctx.globalAlpha = ratio * 0.78;
+            ctx.strokeStyle = current.life > 0.72 ? "#eaf4ff" : "#9adcff";
+            ctx.lineWidth = 1.25;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = "rgba(125, 211, 252, 0.9)";
+            ctx.beginPath();
+            ctx.moveTo(previous.x, previous.y);
+            ctx.lineTo(current.x, current.y);
+            ctx.stroke();
+          }
+        }
+
+        const head = points[points.length - 1];
+        if (head) {
+          const ratio = Math.max(0, head.life / head.maxLife);
+          ctx.globalAlpha = ratio * 0.85;
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = "rgba(219, 234, 254, 0.9)";
+          ctx.beginPath();
+          ctx.arc(head.x, head.y, 1.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+      }
+      requestAnimationFrame(tick);
+      addEventListener("pointermove", onMove, { passive: true });
+      addEventListener("touchmove", onTouch, { passive: true });
+      addEventListener("resize", resize);
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      initParticleBackground();
+      initStarTrail();
+      try {
+        const response = await authFetch("api/me");
+        if (response.ok) {
+          const data = await response.json();
+          panelTitle.textContent = `${data.username || "小助手"} 对话`;
+        }
+      } catch (error) { /* authFetch 已处理 401 跳转 */ }
+    });
+  </script>
+</body>
+</html>

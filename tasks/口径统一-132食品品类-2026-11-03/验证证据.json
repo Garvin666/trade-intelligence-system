@@ -1,0 +1,227 @@
+{
+  "must_fix": [],
+  "whitelisted": [
+    {
+      "file": "docs/Demo优缺点评估报告.md",
+      "tags": [
+        "66品类",
+        "990组合",
+        "裸990",
+        "102960",
+        "11880",
+        "178200"
+      ],
+      "reason": "历史评估快照：记录当时实测结论（Go=0、风险分布等），改写会篡改历史"
+    },
+    {
+      "file": "docs/项目内容分类总览.md",
+      "tags": [
+        "66品类"
+      ],
+      "reason": "pet_feeder_demo_result.json 是磁盘上的真实文件名，非品类口径"
+    },
+    {
+      "file": "frontend/pnpm-lock.yaml",
+      "tags": [
+        "裸990"
+      ],
+      "reason": "依赖锁文件内部哈希/版本号"
+    },
+    {
+      "file": "scripts/build_advisor_doc.py",
+      "tags": [
+        "11880"
+      ],
+      "reason": "刻意保留的历史说法订正说明（8280/11880 → 23760）"
+    },
+    {
+      "file": "scripts/build_coverage_report.py",
+      "tags": [
+        "66品类"
+      ],
+      "reason": "描述 output 快照的真实状态与历史核验对照表，改写会失真"
+    },
+    {
+      "file": "tests/test_significance_refactor.py",
+      "tags": [
+        "裸990"
+      ],
+      "reason": "防回归断言 assert \"990\" not in md，改动会削弱守卫"
+    },
+    {
+      "file": "frontend/src/globe/continent-particles.json",
+      "tags": [
+        "11880"
+      ],
+      "reason": "地理坐标数值"
+    },
+    {
+      "file": "frontend/src/test/integrationStatus.test.ts",
+      "tags": [
+        "裸990"
+      ],
+      "reason": "coverageLabel 函数的任意入参用例，测格式化不改口径"
+    },
+    {
+      "file": "frontend/src/test/PlansPage.test.tsx",
+      "tags": [
+        "裸990"
+      ],
+      "reason": "测试夹具的 mock 值（来源数/覆盖对象），不承载品类口径"
+    },
+    {
+      "file": "src/trade/logistics.py",
+      "tags": [
+        "裸990"
+      ],
+      "reason": "990.0 是运价历史序列的数值，非组合数"
+    }
+  ],
+  "history": [
+    {
+      "file": "docs/互检报告-跨境电商智能选品决策系统-20260818-0924.md",
+      "tags": [
+        "66品类",
+        "990组合",
+        "裸990",
+        "102960",
+        "11880",
+        "178200"
+      ]
+    },
+    {
+      "file": "docs/后端交付报告-F2看板服务端聚合-20260816-1525.md",
+      "tags": [
+        "990组合",
+        "裸990",
+        "102960",
+        "178200"
+      ]
+    },
+    {
+      "file": "docs/后端交付报告-跨境电商智能选品-20260816-1553.md",
+      "tags": [
+        "66x15",
+        "裸990",
+        "102960"
+      ]
+    },
+    {
+      "file": "docs/后端构建流程-跨境电商智能选品-20260816-1553.md",
+      "tags": [
+        "66x15",
+        "裸990",
+        "102960"
+      ]
+    },
+    {
+      "file": "docs/后端设计-F2看板服务端聚合-20260816-1504.md",
+      "tags": [
+        "990组合",
+        "裸990",
+        "102960",
+        "178200"
+      ]
+    },
+    {
+      "file": "docs/后端设计-跨境电商智能选品-20260816-1453.md",
+      "tags": [
+        "66x15",
+        "990组合",
+        "裸990",
+        "102960"
+      ]
+    },
+    {
+      "file": "docs/建议报告-跨境电商智能选品决策系统-20260816-1750.md",
+      "tags": [
+        "990组合",
+        "裸990",
+        "102960"
+      ]
+    },
+    {
+      "file": "docs/检查报告-跨境电商智能选品决策系统-20260816-1417.md",
+      "tags": [
+        "66品类",
+        "990组合",
+        "裸990"
+      ]
+    }
+  ],
+  "product": [
+    {
+      "file": "output/data_status.json",
+      "tags": [
+        "66x15",
+        "990组合",
+        "裸990",
+        "102960"
+      ]
+    },
+    {
+      "file": "output/legal_compliance_check.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/control/control_metrics.json",
+      "tags": [
+        "11880"
+      ]
+    },
+    {
+      "file": "output/control/github_signals.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/control/hf_signals.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/control/system_eval.json",
+      "tags": [
+        "裸990",
+        "11880"
+      ]
+    },
+    {
+      "file": "output/daily_snapshots/2026-08-16.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/daily_snapshots/2026-08-18.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/daily_snapshots/2026-08-21.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/daily_snapshots/2026-08-22.json",
+      "tags": [
+        "裸990"
+      ]
+    },
+    {
+      "file": "output/real_training/status.json",
+      "tags": [
+        "66x15",
+        "990组合",
+        "裸990",
+        "102960"
+      ]
+    }
+  ]
+}
