@@ -75,3 +75,6 @@ Thumbs.db
 
 # ---- 分发压缩包（构建产出的打包件，不入库）----
 项目作品集/*.zip
+
+# ---- GitHub Pages 站点源（走 gh-pages 分支，不进主仓）----
+tasks/发布GitHub-2026-11-03/site/
